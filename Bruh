@@ -129,8 +129,15 @@ local function deleteDebris()
     end)
 end
 
---// GET Request Spammer
+--// GET Request Spammer (only if Titans exist)
 local function invokeServerLoop()
+    -- Ensure Titans are present before starting the loop
+    local titansFolder = Workspace:FindFirstChild("Titans")
+    if not titansFolder or #titansFolder:GetChildren() == 0 then
+        return  -- Exit if no Titans are present
+    end
+
+    -- Start the loop only if Titans exist
     task.spawn(function()
         while true do
             local remote = ReplicatedStorage.Assets.Remotes.GET
@@ -150,6 +157,8 @@ task.spawn(function()
     resetLighting()
     deleteEnvironment()
     deleteDebris()
+
+    -- Start the server loop if there are Titans
     invokeServerLoop()
 
     cleanVisuals(Workspace)
